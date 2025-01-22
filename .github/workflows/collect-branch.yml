@@ -105,22 +105,20 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
-        with:
-          submodules: true
 
       - name: Setup Git
         run: |
           git config user.name "$(git log -n 1 --pretty=format:%an)"
           git config user.email "$(git log -n 1 --pretty=format:%ae)"
 
-      # - name: Update Submodules if needed
-      #   shell: bash
-      #   run: git submodule update --init --recursive --remote
+      - name: Update Submodules if needed
+        shell: bash
+        run: git submodule update --init --recursive --remote
 
       - name: Bundle Repo1 code base for ${{ vars.COLLECTOR }}
         run: |
           git bundle create --progress ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.bundle --all
-          echo -e "\nDirectory Listing $(ls -Alht *)"
+          echo -e "\nDirectory Listing\n$(ls -Alht *)"
 
       - name: Generate Hash
         run: |
@@ -169,7 +167,7 @@ jobs:
           helm repo add haproxy https://haproxytech.github.io/helm-charts
           helm pull haproxy/haproxy
           sha256sum -b * \
-          | tee ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.helm
+          | tee ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.helm.sha
 
       - name: Show Artifacts
         run: ls -Alht *
