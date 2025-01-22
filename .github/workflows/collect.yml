@@ -52,7 +52,8 @@ jobs:
 
       - name: Grab helm
         run: |
-          cd ${{ vars.COLLECTOR }}
+          mkdir -p helmchart
+          cd helmchart
           echo -e "\nSet repo and pull chart"
           helm repo add haproxy https://haproxytech.github.io/helm-charts
           helm pull haproxy/haproxy
@@ -164,8 +165,10 @@ jobs:
         run: |
           mkdir helmchart
           cd helmchart
-          helm pull https://haproxyproj.github.io/haproxy-helm/haproxy
-
+          echo -e "\nSet repo and pull chart"
+          helm repo add haproxy https://haproxytech.github.io/helm-charts
+          helm pull haproxy/haproxy
+          
       - name: Show Artifacts
         run: ls -Alh ${{ vars.COLLECTOR }}-*.*
 

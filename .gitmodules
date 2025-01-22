@@ -4,3 +4,6 @@
 [submodule "haproxy24-source"]
 	path = haproxy24-source
 	url = https://repo1.dso.mil/dsop/opensource/haproxy/haproxy24.git
+[submodule "haproxy-helm"]
+	path = haproxy-helm
+	url = https://github.com/haproxytech/helm-charts.git
