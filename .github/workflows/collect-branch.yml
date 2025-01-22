@@ -54,12 +54,10 @@ jobs:
           echo -e "\nSet repo and pull chart"
           helm repo add haproxy https://haproxytech.github.io/helm-charts
           helm pull haproxy/haproxy
-          helm pull haproxy/kubernetes-ingress
           echo -e "\nInstall helm images plugin"
           helm plugin install https://github.com/nikhilsbhat/helm-images
           echo -e "\nImages listed in chart"
           helm images get haproxy/haproxy
-          helm images get haproxy/kubernetes-ingress
 
       - name: Directory Contents
         run: |
@@ -164,8 +162,7 @@ jobs:
         run: |
           mkdir helmchart
           cd helmchart
-          helm pull https://haproxyproj.github.io/haproxy-helm/haproxy/haproxy
-          helm pull https://haproxyproj.github.io/haproxy-helm/haproxy/kubernetes-ingress
+          helm pull https://haproxyproj.github.io/haproxy-helm/haproxy
 
       - name: Show Artifacts
         run: ls -Alh ${{ vars.COLLECTOR }}-*.*
