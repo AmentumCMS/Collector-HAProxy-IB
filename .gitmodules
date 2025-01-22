@@ -1,0 +1,6 @@
+[submodule "haproxy-source"]
+	path = haproxy-source
+	url = https://repo1.dso.mil/dsop/opensource/haproxy/haproxy-latest.git
+[submodule "haproxy24-source"]
+	path = haproxy24-source
+	url = https://repo1.dso.mil/dsop/opensource/haproxy/haproxy24.git
