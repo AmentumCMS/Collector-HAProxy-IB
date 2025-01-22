@@ -166,9 +166,11 @@ jobs:
           echo -e "\nSet repo and pull chart"
           helm repo add haproxy https://haproxytech.github.io/helm-charts
           helm pull haproxy/haproxy
-          
+          sha256sum -b * \
+          | tee ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.helm
+
       - name: Show Artifacts
-        run: ls -Alh ${{ vars.COLLECTOR }}-*.*
+        run: ls -Alht *
 
       - name: Generate Artifact Hash File
         run: |
@@ -183,7 +185,7 @@ jobs:
 
       - name: ISO Table of contents
         run: |
-          tree -a ${{ vars.COLLECTOR }} \
+          tree -a \
             | tee ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.iso.txt
 
       - name: Upload iso ToC artifact
@@ -206,9 +208,8 @@ jobs:
 
       - name: Generate ISO Hash
         run: |
-          sha256sum -b ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.iso | tee \
-            ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.iso.sha
-          cat ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.iso.sha
+          sha256sum -b ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.iso \
+          | tee ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.iso.sha
 
       - name: Show ISO & Hash
         run: ls -Alh *.iso*
