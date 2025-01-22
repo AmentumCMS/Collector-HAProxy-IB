@@ -55,11 +55,11 @@ jobs:
           cd ${{ vars.COLLECTOR }}
           echo -e "\nSet repo and pull chart"
           helm repo add haproxy https://haproxytech.github.io/helm-charts
-          helm pull haproxy
+          helm pull haproxy/haproxy
           echo -e "\nInstall helm images plugin"
           helm plugin install https://github.com/nikhilsbhat/helm-images
           echo -e "\nImages listed in chart"
-          helm images get haproxy
+          helm images get haproxy/haproxy
 
       - name: Directory Contents
         run: |
