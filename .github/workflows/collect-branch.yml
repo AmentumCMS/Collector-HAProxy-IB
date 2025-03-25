@@ -56,11 +56,13 @@ jobs:
           helm repo add haproxy https://haproxytech.github.io/helm-charts/
           helm pull haproxy/haproxy
           echo -e "\nInstall helm images plugin"
-          helm plugin install https://github.com/nikhilsbhat/helm-images
+          helm plugin install https://github.com/nikhilsbhat/helm-images > /dev/null 2>&1
           echo -e "\nImages listed in chart"
           helm images get haproxy/haproxy
+          echo -e "\nHash chart"
           sha256sum -b * \
           | tee ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.helm.sha
+          echo -e "\nList files: $(ls -1SSh)"
 
       - name: Directory Contents
         run: |
@@ -187,11 +189,13 @@ jobs:
           helm repo add haproxy https://haproxytech.github.io/helm-charts/
           helm pull haproxy/haproxy
           echo -e "\nInstall helm images plugin"
-          helm plugin install https://github.com/nikhilsbhat/helm-images
+          helm plugin install https://github.com/nikhilsbhat/helm-images > /dev/null 2>&1
           echo -e "\nImages listed in chart"
           helm images get haproxy/haproxy
+          echo -e "\nHash chart"
           sha256sum -b * \
           | tee ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.helm.sha
+          echo -e "\nList files:\n$(ls -1SSh)"
 
       - name: Show Artifacts
         run: ls -Alht ${{ vars.COLLECTOR }}
