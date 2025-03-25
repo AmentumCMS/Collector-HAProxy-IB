@@ -50,19 +50,22 @@ jobs:
 
       - name: Grab helm
         run: |
+          HELM_URL="https://haproxytech.github.io/helm-charts/"
+          HELM_REPO="haproxy"
+          HELM_NAME="haproxy"
           mkdir -p ${{ vars.COLLECTOR }}/helmchart
           cd ${{ vars.COLLECTOR }}/helmchart
           echo -e "\nSet repo and pull chart"
-          helm repo add haproxy https://haproxytech.github.io/helm-charts/
-          helm pull haproxy/haproxy
+          helm repo add $HELM_REPO $HELM_URL
+          helm pull $HELM_NAME/$HELM_NAME
           echo -e "\nInstall helm images plugin"
           helm plugin install https://github.com/nikhilsbhat/helm-images > /dev/null 2>&1
           echo -e "\nImages listed in chart"
-          helm images get haproxy/haproxy
-          echo -e "\nHash chart"
+          helm images get $HELM_REPO/$HELM_NAME
+          echo -e "\n\nHelmchart Hash "
           sha256sum -b * \
           | tee ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.helm.sha
-          echo -e "\nList files: $(ls -1SSh)"
+          echo -e "\n\nList files:\n$(pwd;ls -1SSh)"
 
       - name: Directory Contents
         run: |
@@ -104,14 +107,6 @@ jobs:
           path: ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.tgz.txt
           if-no-files-found: error
 
-
-      - name: Upload Helmchart
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.helm
-          path: ${{ vars.COLLECTOR }}/helmchart/*
-          if-no-files-found: error
-  
   Code:
     needs: [Date]
     runs-on: ubuntu-24.04
@@ -183,20 +178,30 @@ jobs:
 
       - name: Pull helm chart
         run: |
+          HELM_URL="https://haproxytech.github.io/helm-charts/"
+          HELM_REPO="haproxy"
+          HELM_NAME="haproxy"
           mkdir -p ${{ vars.COLLECTOR }}/helmchart
           cd ${{ vars.COLLECTOR }}/helmchart
           echo -e "\nSet repo and pull chart"
-          helm repo add haproxy https://haproxytech.github.io/helm-charts/
-          helm pull haproxy/haproxy
+          helm repo add $HELM_REPO $HELM_URL
+          helm pull $HELM_NAME/$HELM_NAME
           echo -e "\nInstall helm images plugin"
           helm plugin install https://github.com/nikhilsbhat/helm-images > /dev/null 2>&1
           echo -e "\nImages listed in chart"
-          helm images get haproxy/haproxy
-          echo -e "\nHash chart"
+          helm images get $HELM_REPO/$HELM_NAME
+          echo -e "\n\nHelmchart Hash "
           sha256sum -b * \
           | tee ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.helm.sha
-          echo -e "\nList files:\n$(ls -1SSh)"
+          echo -e "\n\nList files:\n$(pwd;ls -1SSh)"
 
+      - name: Upload Helmchart
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.helm
+          path: ${{ vars.COLLECTOR }}/helmchart/*
+          if-no-files-found: error
+  
       - name: Show Artifacts
         run: ls -Alht ${{ vars.COLLECTOR }}
 
@@ -256,6 +261,7 @@ jobs:
         with:
           name: ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.iso.sha
           path: ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.iso.sha
+          if-no-files-found: error
 
   Release:
     runs-on: ubuntu-24.04
@@ -275,6 +281,8 @@ jobs:
       - name: Show Artifacts
         run: ls -Alht ${{ vars.COLLECTOR }}-*.*
 
+      # Create Release
+
   Sharepoint:
     runs-on: ubuntu-24.04
     needs: [Date, MakeISO]
@@ -289,3 +297,6 @@ jobs:
 
       - name: Show Artifacts
         run: ls -Alht ${{ vars.COLLECTOR }}-*.*
+
+      # Upload files to Sharepoint
+
