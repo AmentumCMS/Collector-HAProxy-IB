@@ -594,4 +594,3 @@ jobs:
         run: ls -Alht ${{ vars.COLLECTOR }}-*.*
 
       # Upload files to Sharepoint
-
